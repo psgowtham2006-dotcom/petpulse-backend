@@ -1,21 +1,23 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 spring:
   application:
     name: petpulse
-  profiles:
-    default: embedded
+
   datasource:
-    url: jdbc:h2:file:./data/petpulse_db;MODE=MySQL;DATABASE_TO_LOWER=TRUE;AUTO_SERVER=TRUE
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:file:./data/petpulse_db;MODE=MySQL;DATABASE_TO_LOWER=TRUE;AUTO_SERVER=TRUE}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.h2.Driver}
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
     show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+    database-platform: ${SPRING_JPA_DATABASE_PLATFORM:org.hibernate.dialect.H2Dialect}
+
   servlet:
     multipart:
       max-file-size: 5MB
@@ -25,6 +27,7 @@ petpulse:
   jwt:
     secret: PeakPerform2024SuperSecretKeyForHmacSHA256SigningAtLeast256BitsLong
     expiration: 86400000
+
   upload-path: ./uploads/
 
 springdoc:
@@ -32,3 +35,9 @@ springdoc:
     path: /swagger-ui.html
   api-docs:
     enabled: true
+
+logging:
+  level:
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
